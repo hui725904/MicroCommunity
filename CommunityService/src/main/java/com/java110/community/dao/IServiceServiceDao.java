@@ -1,11 +1,7 @@
 package com.java110.community.dao;
 
 
-import com.java110.common.exception.DAOException;
-import com.java110.entity.merchant.BoMerchant;
-import com.java110.entity.merchant.BoMerchantAttr;
-import com.java110.entity.merchant.Merchant;
-import com.java110.entity.merchant.MerchantAttr;
+import com.java110.utils.exception.DAOException;
 
 
 import java.util.List;
@@ -77,5 +73,41 @@ public interface IServiceServiceDao {
      * @return 服务数量
      */
     int queryServicesCount(Map info);
+
+
+    /**
+     * 保存 服务信息
+     * @param businessServiceProvideInfo 服务信息 封装
+     * @throws DAOException 操作数据库异常
+     */
+    int saveServiceProvideInfo(Map businessServiceProvideInfo) throws DAOException;
+
+
+    /**
+     * 查询服务信息（instance过程）
+     * 根据bId 查询服务信息
+     * @param info bId 信息
+     * @return 服务信息
+     * @throws DAOException DAO异常
+     */
+    List<Map> getServiceProvideInfo(Map info) throws DAOException;
+
+
+
+    /**
+     * 修改服务信息
+     * @param info 修改信息
+     * @throws DAOException DAO异常
+     */
+    int updateServiceProvideInfo(Map info) throws DAOException;
+
+
+    /**
+     * 查询服务总数
+     *
+     * @param info 服务信息
+     * @return 服务数量
+     */
+    int queryServiceProvidesCount(Map info);
 
 }

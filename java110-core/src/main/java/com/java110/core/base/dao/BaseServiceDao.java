@@ -2,15 +2,13 @@ package com.java110.core.base.dao;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.log.LoggerEngine;
+import com.java110.utils.log.LoggerEngine;
 import com.java110.core.base.AppBase;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import redis.clients.jedis.JedisPool;
 
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * 负责和数据库交互基类

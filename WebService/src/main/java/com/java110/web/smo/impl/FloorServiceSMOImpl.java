@@ -1,13 +1,13 @@
 package com.java110.web.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.PrivilegeCodeConstant;
-import com.java110.common.constant.ResponseConstant;
-import com.java110.common.constant.ServiceConstant;
-import com.java110.common.exception.SMOException;
-import com.java110.common.util.Assert;
-import com.java110.common.util.StringUtil;
+import com.java110.utils.constant.PrivilegeCodeConstant;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.constant.ServiceConstant;
+import com.java110.utils.exception.SMOException;
+import com.java110.utils.util.Assert;
 import com.java110.core.context.IPageData;
+import com.java110.entity.component.ComponentValidateResult;
 import com.java110.web.core.BaseComponentSMO;
 import com.java110.web.smo.IFloorServiceSMO;
 import org.slf4j.Logger;
@@ -36,6 +36,26 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
     private RestTemplate restTemplate;
 
     /**
+     * 查询 楼栋
+     * @param pd 页面数据封装对象
+     * @return 返回 ResponseEntity对象包含 http状态 信息 body信息
+     */
+    public ResponseEntity<String> getFloor(IPageData pd){
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        paramIn.put("page",1);
+        paramIn.put("row",1);
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_FLOOR);
+
+        ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
+
+        ResponseEntity responseEntity = this.callCenterService(restTemplate, pd, "",
+                ServiceConstant.SERVICE_API_URL + "/api/floor.queryFloors" +  mapToUrlParam(paramIn),
+                HttpMethod.GET);
+
+        return responseEntity;
+    }
+
+    /**
      * 查询小区楼
      *
      * @param pd 页面数据封装对象
@@ -43,10 +63,12 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
      */
     @Override
     public ResponseEntity<String> listFloor(IPageData pd) {
-
-        validateListFloor(pd);
-
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        if(paramIn.containsKey("row")){
+            paramIn.put("rows",paramIn.getString("row"));
+        }
+        validateListFloor(pd,paramIn);
+
         int page = Integer.parseInt(paramIn.getString("page"));
         int rows = Integer.parseInt(paramIn.getString("rows"));
         String communityId = paramIn.getString("communityId");
@@ -69,12 +91,7 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/floor.queryFloors?row=" + rows + "&page=" + page + "&communityId="
-                + communityId;
-
-        if (!StringUtil.isEmpty(floorNum)) {
-            apiUrl += "&floorNum=" + floorNum;
-        }
+        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/floor.queryFloors" + mapToUrlParam(paramIn);
 
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,
@@ -223,11 +240,11 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
      *
      * @param pd 页面封装对象
      */
-    private void validateListFloor(IPageData pd) {
-        Assert.jsonObjectHaveKey(pd.getReqData(), "page", "请求报文中未包含page节点");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "rows", "请求报文中未包含rows节点");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "请求报文中未包含communityId节点");
-        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+    private void validateListFloor(IPageData pd, JSONObject paramIn) {
+        Assert.jsonObjectHaveKey(paramIn, "page", "请求报文中未包含page节点");
+        Assert.jsonObjectHaveKey(paramIn, "rows", "请求报文中未包含rows节点");
+        Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId节点");
+        //JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         Assert.isInteger(paramIn.getString("page"), "page不是数字");
         Assert.isInteger(paramIn.getString("rows"), "rows不是数字");
         Assert.hasLength(paramIn.getString("communityId"), "小区ID不能为空");

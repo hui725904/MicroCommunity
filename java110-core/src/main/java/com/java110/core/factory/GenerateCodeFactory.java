@@ -1,14 +1,14 @@
 package com.java110.core.factory;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.cache.MappingCache;
-import com.java110.common.constant.MappingConstant;
-import com.java110.common.constant.ResponseConstant;
-import com.java110.common.exception.GenerateCodeException;
-import com.java110.common.exception.ResponseErrorException;
-import com.java110.common.factory.ApplicationContextFactory;
-import com.java110.common.util.Assert;
-import com.java110.common.util.DateUtil;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.exception.GenerateCodeException;
+import com.java110.utils.exception.ResponseErrorException;
+import com.java110.utils.factory.ApplicationContextFactory;
+import com.java110.utils.util.Assert;
+import com.java110.utils.util.DateUtil;
 import com.java110.core.smo.code.ICodeApi;
 import org.springframework.web.client.RestTemplate;
 
@@ -82,9 +82,22 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_demoId="90";
     public static final String CODE_PREFIX_noticeId="96";
 
+    public static final String CODE_PREFIX_HCJOBId="96";
     //BUSINESSTYPE
     public static final String CODE_PREFIX_id="99";
     public static final String CODE_PREFIX_service_id="98";
+
+    public static final String MENU_GROUP = "80";
+    public static final String MENU = "70";
+    public static final String BASE_PRIVILEGE = "50";
+    public static final String CODE_PREFIX_vId = "11";
+    public static final String CODE_PREFIX_file_id = "81";
+    public static final String CODE_PREFIX_repairId = "82";
+    public static final String CODE_PREFIX_ruId = "83";
+    public static final String CODE_PREFIX_orgId = "84";
+
+
+
 
     /**
      * 只有在不调用服务生成ID时有用

@@ -28,7 +28,8 @@ import java.nio.charset.Charset;
  * @date 2016年8月6日
  * @tag
  */
-@SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.community", "com.java110.core", "com.java110.cache", "com.java110.db"})
+@SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.community",
+        "com.java110.core", "com.java110.cache", "com.java110.config.properties.code","com.java110.db"})
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.community.listener"})
@@ -51,8 +52,24 @@ public class CommunityServiceApplicationStart {
         return restTemplate;
     }
 
+    /**
+     * 实例化RestTemplate
+     *
+     * @return restTemplate
+     */
+    @Bean
+    public com.java110.core.client.RestTemplate restTemplateNoLoadBalanced() {
+        StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
+        com.java110.core.client.RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(com.java110.core.client.RestTemplate.class);
+        return restTemplate;
+    }
+
     public static void main(String[] args) throws Exception {
-        ApplicationContext context = SpringApplication.run(CommunityServiceApplicationStart.class, args);
-        ServiceStartInit.initSystemConfig(context);
+        try{
+            ApplicationContext context = SpringApplication.run(CommunityServiceApplicationStart.class, args);
+            ServiceStartInit.initSystemConfig(context);
+        }catch (Throwable e){
+            logger.error("系统启动失败",e);
+        }
     }
 }

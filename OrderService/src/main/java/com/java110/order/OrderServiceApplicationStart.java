@@ -1,6 +1,8 @@
 package com.java110.order;
 
-import com.java110.common.factory.ApplicationContextFactory;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.factory.ApplicationContextFactory;
+import com.java110.utils.util.StringUtil;
 import com.java110.core.annotation.Java110ListenerDiscovery;
 import com.java110.core.client.RestTemplate;
 import com.java110.event.center.DataFlowEventPublishing;
@@ -31,7 +33,7 @@ import java.nio.charset.Charset;
  * @tag
  */
 @SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.order",
-        "com.java110.core", "com.java110.event.order", "com.java110.cache", "com.java110.db"})
+        "com.java110.core", "com.java110.event.order", "com.java110.cache", "com.java110.config.properties.code","com.java110.db"})
 @EnableDiscoveryClient
 //@EnableConfigurationProperties(EventProperties.class)
 @Java110ListenerDiscovery(listenerPublishClass = DataFlowEventPublishing.class,
@@ -67,16 +69,20 @@ public class OrderServiceApplicationStart {
     }
 
     public static void main(String[] args) throws Exception {
-        ApplicationContext context = SpringApplication.run(OrderServiceApplicationStart.class, args);
+        try {
+            ApplicationContext context = SpringApplication.run(OrderServiceApplicationStart.class, args);
 
-        //服务启动加载
-        ServiceStartInit.initSystemConfig(context);
+            //服务启动加载
+            ServiceStartInit.initSystemConfig(context);
 
-        //加载事件数据
-        //EventConfigInit.initSystemConfig();
+            //加载事件数据
+            //EventConfigInit.initSystemConfig();
 
-        //刷新缓存
-        flushMainCache(args);
+            //刷新缓存
+            flushMainCache(args);
+        }catch (Throwable e){
+            logger.error("系统启动失败",e);
+        }
     }
 
 
@@ -88,6 +94,15 @@ public class OrderServiceApplicationStart {
     private static void flushMainCache(String[] args) {
 
         logger.debug("判断是否需要刷新日志，参数 args 为 {}", args);
+
+        //因为好多朋友启动时 不加 参数-Dcache 所以启动时检测 redis 中是否存在 java110_hc_version
+        String mapping = MappingCache.getValue("java110_hc_version");
+        if(StringUtil.isEmpty(mapping)){
+            ICenterServiceCacheSMO centerServiceCacheSMO = (ICenterServiceCacheSMO) ApplicationContextFactory.getBean("centerServiceCacheSMOImpl");
+            centerServiceCacheSMO.startFlush();
+            return ;
+        }
+
         if (args == null || args.length == 0) {
             return;
         }

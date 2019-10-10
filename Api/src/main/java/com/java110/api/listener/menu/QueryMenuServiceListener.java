@@ -3,10 +3,10 @@ package com.java110.api.listener.menu;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
-import com.java110.common.constant.CommonConstant;
-import com.java110.common.constant.ServiceCodeConstant;
-import com.java110.common.util.Assert;
-import com.java110.common.util.StringUtil;
+import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.DataFlowFactory;
@@ -154,6 +154,7 @@ public class QueryMenuServiceListener extends AbstractServiceApiDataFlowListener
             childMenu.put("name", tMenu.getString("menuName"));
             childMenu.put("href", tMenu.getString("url"));
             childMenu.put("seq", tMenu.getString("menuSeq"));
+            childMenu.put("isShow", tMenu.getString("isShow"));
             childs.add(childMenu);
         }
         return new ResponseEntity<String>(tempMenus.toJSONString(), HttpStatus.OK);

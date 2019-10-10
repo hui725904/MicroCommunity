@@ -1,9 +1,9 @@
 package com.java110.web.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.PrivilegeCodeConstant;
-import com.java110.common.constant.ServiceConstant;
-import com.java110.common.util.Assert;
+import com.java110.utils.constant.PrivilegeCodeConstant;
+import com.java110.utils.constant.ServiceConstant;
+import com.java110.utils.util.Assert;
 import com.java110.core.context.IPageData;
 import com.java110.web.core.BaseComponentSMO;
 import com.java110.web.smo.IUnitServiceSMO;
@@ -60,8 +60,7 @@ public class UnitServiceSMOImpl extends BaseComponentSMO implements IUnitService
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/unit.queryUnits?floorId=" + floorId + "&communityId="
-                + communityId;
+        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/unit.queryUnits" + mapToUrlParam(paramIn);
 
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,

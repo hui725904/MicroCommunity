@@ -91,7 +91,18 @@
                     errorCallback(error.bodyText,error);
                     vc.loading('close');
                 });
-        }
+        },
+        upload:function(componentCode,componentMethod,param,options,successCallback,errorCallback){
+                vc.loading('open');
+                Vue.http.post('/callComponent/upload/'+componentCode +"/"+componentMethod, param, options)
+                .then(function(res){
+                    successCallback(res.bodyText,res);
+                    vc.loading('close');
+                }, function(error){
+                    errorCallback(error.bodyText,error);
+                    vc.loading('close');
+                });
+        },
 
     };
 
@@ -159,6 +170,15 @@
         return JSON.parse(window.localStorage.getItem('hc_menus'));
     };
 
+    //保存菜单状态
+    vc.setMenuState = function(_menuState){
+        window.localStorage.setItem('hc_menu_state',_menuState);
+    };
+    //获取菜单状态
+    vc.getMenuState = function(){
+        return window.localStorage.getItem('hc_menu_state');
+    };
+
     //保存用户菜单
     vc.saveData = function(_key,_value){
         window.localStorage.setItem(_key,JSON.stringify(_value));
@@ -204,6 +224,14 @@
             }
         }
     };
+    //扩展 现有的对象 没有的属性扩充上去
+    vc.extendObject = function(org,dst){
+        for(var key in dst){
+            if (!org.hasOwnProperty(key)){
+                dst[key] = org[key]
+            }
+        }
+    };
     //获取url参数
     vc.getParam = function(_key){
         //返回当前 URL 的查询部分（问号 ? 之后的部分）。
@@ -239,6 +267,13 @@
            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
           }
          return str.join("&");
+    }
+    //空判断 true 为非空 false 为空
+    vc.notNull = function(_paramObj){
+        if(_paramObj == null || _paramObj == undefined || _paramObj.trim() == ''){
+            return false;
+        }
+        return true;
     }
 
 
@@ -283,6 +318,7 @@
       var s = time.getSeconds();
       return y+'-'+add0(m)+'-'+add0(d)+' '+add0(h)+':'+add0(mm)+':'+add0(s);
     }
+
 })(window.vc);
 
 

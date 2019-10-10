@@ -2,10 +2,10 @@ package com.java110.api.listener;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.*;
-import com.java110.common.exception.ListenerExecuteException;
-import com.java110.common.util.Assert;
-import com.java110.common.util.StringUtil;
+import com.java110.utils.constant.*;
+import com.java110.utils.exception.ListenerExecuteException;
+import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
@@ -369,9 +369,10 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
 
     /**
      * 分页信息校验
+     *
      * @param reqJson
      */
-    protected void validatePageInfo(JSONObject reqJson){
+    protected void validatePageInfo(JSONObject reqJson) {
         Assert.jsonObjectHaveKey(reqJson, "page", "请求中未包含page信息");
         Assert.jsonObjectHaveKey(reqJson, "row", "请求中未包含row信息");
     }

@@ -1,9 +1,9 @@
 package com.java110.community.dao.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.ResponseConstant;
-import com.java110.common.exception.DAOException;
-import com.java110.common.util.DateUtil;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.exception.DAOException;
+import com.java110.utils.util.DateUtil;
 import com.java110.community.dao.IServiceServiceDao;
 import com.java110.core.base.dao.BaseServiceDao;
 import org.slf4j.Logger;
@@ -119,6 +119,73 @@ public class ServiceServiceDaoImpl extends BaseServiceDao implements IServiceSer
         logger.debug("查询服务数据 入参 info : {}", info);
 
         List<Map> businessServiceInfos = sqlSessionTemplate.selectList("serviceServiceDaoImpl.queryServicesCount", info);
+        if (businessServiceInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessServiceInfos.get(0).get("count").toString());
+    }
+
+
+    /**
+     * 服务信息封装
+     *
+     * @param businessServiceInfo 服务信息 封装
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public int saveServiceProvideInfo(Map businessServiceInfo) throws DAOException {
+        // 查询business_user 数据是否已经存在
+        logger.debug("保存服务提供信息 入参 saveServiceProvideInfo : {}", businessServiceInfo);
+        int saveFlag = sqlSessionTemplate.insert("serviceServiceDaoImpl.saveServiceProvideInfo", businessServiceInfo);
+
+        return saveFlag;
+    }
+
+
+    /**
+     * 查询服务信息（instance）
+     *
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public List<Map> getServiceProvideInfo(Map info) throws DAOException {
+        logger.debug("查询服务信息 入参 info : {}", info);
+
+        List<Map> businessServiceInfos = sqlSessionTemplate.selectList("serviceServiceDaoImpl.getServiceProvideInfo", info);
+
+        return businessServiceInfos;
+    }
+
+
+    /**
+     * 修改服务信息
+     *
+     * @param info 修改信息
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public int updateServiceProvideInfo(Map info) throws DAOException {
+        logger.debug("修改服务信息Instance 入参 info : {}", info);
+
+        int saveFlag = sqlSessionTemplate.update("serviceServiceDaoImpl.updateServiceProvideInfo", info);
+
+        return saveFlag;
+    }
+
+    /**
+     * 查询服务数量
+     *
+     * @param info 服务信息
+     * @return 服务数量
+     */
+    @Override
+    public int queryServiceProvidesCount(Map info) {
+        logger.debug("查询服务数据 入参 info : {}", info);
+
+        List<Map> businessServiceInfos = sqlSessionTemplate.selectList("serviceServiceDaoImpl.queryServiceProvidesCount", info);
         if (businessServiceInfos.size() < 1) {
             return 0;
         }

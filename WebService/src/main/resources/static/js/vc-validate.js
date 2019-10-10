@@ -98,12 +98,16 @@ vc 校验 工具类 -method
          * @param {校验文本} text
          */
         num:function(text){
-            var regNum = /^[0-9]+$/;
+            var regNum = /^[1-9][0-9]*$/;
             return regNum.test(text);
         },
         date:function(str) {
             var regDate = /^(\d{4})-(\d{2})-(\d{2})$/;
             return regDate.test(str);
+        },
+        dateTime:function(str){
+            var reDateTime = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
+            return reDateTime.test(str);
         },
         /**
             金额校验
@@ -207,6 +211,9 @@ vc 校验 工具类 -method
 
                     if(configObj.limit == 'date'){
                         validate.setState(validate.date(tmpDataObj),configObj.errInfo);
+                    }
+                    if(configObj.limit == 'dateTime'){
+                        validate.setState(validate.dateTime(tmpDataObj),configObj.errInfo);
                     }
 
                     if(configObj.limit == 'money'){

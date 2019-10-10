@@ -1,148 +1,93 @@
 {
-  "templateName":"服务",
-  "templateCode":"service",
-  "templateKey":"serviceId",
-  "templateKeyName":"服务ID",
-  "searchCode": "name",
-  "searchName": "服务名称",
-  "columns":[
+  "templateName":"组织管理",
+  "templateCode":"org",
+  "templateKey":"orgId",
+  "templateKeyName":"组织ID",
+  "searchCode": "orgName",
+  "searchName": "组织名称",
+  "conditions": [
+
     {
-      "code":"name",
-      "cnCode":"服务名称",
-      "desc":"必填，请填写服务名称",
-      "required":true,
-      "hasDefaultValue":false,
-      "inputType":"input",
-      "limit":"maxLength",
-      "limitParam":"50",
-      "limitErrInfo":"服务名称不能超过50"
+      "name": "组织ID",
+      "inputType": "input",
+      "code": "orgId",
+      "whereCondition": "equal"
     },
     {
-      "code":"serviceCode",
-      "cnCode":"服务编码",
-      "desc":"必填，请填写服务编码如 service.saveService",
+      "name": "组织名称",
+      "inputType": "input",
+      "code": "orgName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "组织级别",
+      "inputType": "input",
+      "code": "orgLevel",
+      "selectValue":"1,2,3",
+      "selectValueName":"公司级,分公司级,部门级",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "上级组织",
+      "inputType": "input",
+      "code": "parentOrgId",
+      "selectValue":"xxx,xxx,xxx",
+      "selectValueName":"xxx,xxx,xxx",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns":[
+    {
+      "code":"orgName",
+      "cnCode":"组织名称",
+      "desc":"必填，请填写组织名称",
       "required":true,
       "hasDefaultValue":false,
       "inputType":"input",
       "limit":"maxin",
       "limitParam":"2,50",
-      "limitErrInfo":"服务编码必须在2至50字符之间"
+      "limitErrInfo":"组织名称长度为2至50",
+      "show": true
     },
     {
-      "code":"businessTypeCd",
-      "cnCode":"秘钥",
-      "desc":"可填，请填写秘钥，如果填写了需要加密传输",
-      "required":true,
-      "hasDefaultValue":true,
-      "defaultValue":"API",
-      "inputType":"none",
-      "limit":"maxin",
-      "limitParam":"2,4",
-      "limitErrInfo":"业务类型必须为API"
-    },
-
-    {
-      "code":"seq",
-      "cnCode":"序列",
-      "desc":"必填，请填写序列",
-      "required":true,
-      "hasDefaultValue":true,
-      "defaultValue":"1",
-      "inputType":"none",
-      "limit":"maxLength",
-      "limitParam":"1",
-      "limitErrInfo":"序列格式错误"
-    },
-
-    {
-      "code":"messageQueueName",
-      "cnCode":"消息队列",
-      "desc":"可填，请填写消息队列，订单在异步调用时使用",
-      "required":false,
-      "hasDefaultValue":false,
-      "defaultValue":"",
-      "inputType":"input",
-      "limit":"maxLength",
-      "limitParam":"50",
-      "limitErrInfo":"消息队列不能超过50"
-    }
-  ,
-
-    {
-      "code":"isInstance",
-      "cnCode":"是否实例",
-      "desc":"可填，请填写实例 Y 或N",
-      "required":true,
-      "hasDefaultValue":true,
-      "defaultValue":"Y",
-      "inputType":"input",
-      "limit":"maxLength",
-      "limitParam":"50",
-      "limitErrInfo":"实例不能超过50"
-    }
-  ,
-
-    {
-      "code":"url",
-      "cnCode":"调用地址",
-      "desc":"可填，请填写调用地址",
-      "required":false,
-      "hasDefaultValue":true,
-      "defaultValue":"http://order-service/orderApi/service",
-      "inputType":"input",
-      "limit":"maxLength",
-      "limitParam":"200",
-      "limitErrInfo":"调用地址不能超过200"
-    },
-    {
-      "code":"method",
-      "cnCode":"调用方式",
-      "desc":"必填，请填写调用方式",
+      "code":"orgLevel",
+      "cnCode":"组织级别",
+      "desc":"必填，请填写报修人名称",
       "required":true,
       "hasDefaultValue":false,
       "inputType":"select",
-      "selectValue":"GET,POST",
-      "selectValueName":"http get,http post",
+      "selectValue":"1,2,3",
+      "selectValueName":"公司级,分公司级,部门级",
+      "limit":"maxin",
+      "limitParam":"2,50",
+      "limitErrInfo":"报修人名称必须在2至50字符之间",
+      "show": true
+    },
+    {
+      "code":"parentOrgId",
+      "cnCode":"上级ID",
+      "desc":"必填，请选择上级ID",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"select",
+      "selectValue":"1,2,3",
+      "selectValueName":"公司级,分公司级,部门级",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"上级ID不正确",
+      "show": true
+    },
+    {
+      "code":"description",
+      "cnCode":"描述",
+      "desc":"必填，请填写描述",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"textarea",
       "limit":"maxLength",
-      "limitParam":"50",
-      "limitErrInfo":"调用方式不能超过50"
-    },
-    {
-      "code":"timeout",
-      "cnCode":"超时时间",
-      "desc":"必填，请填写超时时间",
-      "required":true,
-      "hasDefaultValue":true,
-      "defaultValue":"60",
-      "inputType":"input",
-      "limit":"num",
-      "limitParam":"",
-      "limitErrInfo":"超时时间必须为数字"
-    },
-    {
-      "code":"retryCount",
-      "cnCode":"重试次数",
-      "desc":"必填，请填写重试次数",
-      "required":true,
-      "hasDefaultValue":true,
-      "defaultValue":"3",
-      "inputType":"input",
-      "limit":"num",
-      "limitParam":"",
-      "limitErrInfo":"重试次数必须为数字"
-    },
-    {
-      "code":"provideAppId",
-      "cnCode":"提供服务",
-      "desc":"必填，请填写提供服务",
-      "required":true,
-      "hasDefaultValue":true,
-      "defaultValue":"8000418002",
-      "inputType":"none",
-      "limit":"num",
-      "limitParam":"",
-      "limitErrInfo":"重试次数必须为数字"
+      "limitParam":"200",
+      "limitErrInfo":"描述不能为空",
+      "show": false
     }
-
   ]
 }
